@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Feliz Cumpleaños Amor! - Att: Odalys</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Mali:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffd3e2 0%, #fff0f5 50%, #d4e0ff 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Mali', cursive;
+      overflow-x: hidden;
+      padding: 15px;
+    }
+
+    /* Floating background hearts */
+    .bg-heart {
+      position: fixed;
+      color: rgba(255, 182, 193, 0.4);
+      font-size: 20px;
+      animation: floatUp 8s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) scale(0.8) rotate(0deg);
+        opacity: 0;
+      }
+      20% { opacity: 0.8; }
+      100% {
+        transform: translateY(-100px) scale(1.3) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .main-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-radius: 35px;
+      padding: 30px 25px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(230, 100, 150, 0.2), 
+                  0 0 0 8px rgba(255, 255, 255, 0.6);
+      position: relative;
+      z-index: 10;
+      border: 3px solid #ffb6c1;
+    }
+
+    .header-title {
+      font-family: 'Fredoka One', cursive;
+      color: #ff4081;
+      font-size: 2.2rem;
+      text-shadow: 2px 2px 0px #ffe4e1;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      font-family: 'Quicksand', sans-serif;
+      color: #ff6f91;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    /* Kawaii Panda Stage */
+    .panda-stage {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      margin: 0 auto 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .panda-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.08));
+    }
+
+    /* Sparkles behind panda */
+    .sparkle {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      animation: sparkleAnim 2s infinite ease-in-out alternate;
+    }
+
+    @keyframes sparkleAnim {
+      0% { transform: scale(0.5) rotate(0deg); opacity: 0.3; }
+      100% { transform: scale(1.2) rotate(45deg); opacity: 1; }
+    }
+
+    /* Candle Flame Animation */
+    .flame {
+      transform-origin: center bottom;
+      animation: flicker 0.8s infinite alternate ease-in-out;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1) rotate(-2deg); opacity: 0.95; }
+      50% { transform: scale(1.1, 1.2) rotate(2deg); opacity: 1; }
+      100% { transform: scale(0.9, 0.95) rotate(-1deg); opacity: 0.85; }
+    }
+
+    .smoke {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .blown-out .flame {
+      opacity: 0 !important;
+      transform: scale(0) !important;
+    }
+
+    .blown-out .smoke {
+      opacity: 0.7;
+      animation: riseSmoke 2s forwards ease-out;
+    }
+
+    @keyframes riseSmoke {
+      0% { transform: translateY(0) scale(0.8); opacity: 0.8; }
+      100% { transform: translateY(-25px) scale(1.8); opacity: 0; }
+    }
+
+    /* Eye transitions for kawaii reactions */
+    .eye-open {
+      transition: opacity 0.2s ease;
+    }
+    .eye-closed {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    /* Happy/Blowing expression */
+    .panda-happy .eye-open {
+      opacity: 0;
+    }
+    .panda-happy .eye-closed {
+      opacity: 1;
+    }
+
+    .panda-happy .mouth-open {
+      transform: scale(1.3);
+    }
+
+    /* Message card */
+    .message-box {
+      background: #fff0f6;
+      border-radius: 20px;
+      padding: 18px 20px;
+      border: 2px dashed #ffb6c1;
+      margin-bottom: 25px;
+      box-shadow: inset 0 2px 6px rgba(255, 182, 193, 0.2);
+    }
+
+    .message-text {
+      color: #d81b60;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .signature {
+      display: block;
+      margin-top: 10px;
+      font-family: 'Fredoka One', cursive;
+      color: #ff4081;
+      font-size: 1.25rem;
+    }
+
+    /* Interactive Button */
+    .btn-blow {
+      background: linear-gradient(45deg, #ff4081, #ff79b0);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.25rem;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 64, 129, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      outline: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-blow:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(255, 64, 129, 0.5);
+    }
+
+    .btn-blow:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .btn-blow:disabled {
+      background: #ccc;
+      box-shadow: none;
+      cursor: default;
+      transform: none;
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      color: #888;
+      margin-top: 12px;
+      font-weight: 500;
+    }
+
+    /* Pop Hearts Animation */
+    .pop-heart {
+      position: absolute;
+      pointer-events: none;
+      animation: popAndFade 1.2s forwards ease-out;
+      z-index: 100;
+      font-size: 24px;
+    }
+
+    @keyframes popAndFade {
+      0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(1.5); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background floating hearts -->
+  <div id="bgHearts"></div>
+
+  <div class="main-card">
+    <h1 class="header-title">¡Feliz Cumpleaños!</h1>
+    <div class="subtitle">¡Un día super especial! ✨</div>
+
+    <!-- Kawaii Panda SVG Stage -->
+    <div class="panda-stage" id="pandaStage">
+      <div class="sparkle" style="top: 10%; left: 15%; animation-delay: 0s;"></div>
+      <div class="sparkle" style="top: 20%; right: 12%; animation-delay: 0.5s;"></div>
+      <div class="sparkle" style="bottom: 25%; left: 10%; animation-delay: 1s;"></div>
+      <div class="sparkle" style="bottom: 15%; right: 15%; animation-delay: 1.5s;"></div>
+
+      <svg class="panda-svg" viewBox="0 0 300 300" id="pandaSvg">
+        <defs>
+          <!-- Soft gradients -->
+          <radialGradient id="blush" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff79b0" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#ff79b0" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="cakeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ffb6c1"/>
+            <stop offset="50%" stop-color="#ffc0cb"/>
+            <stop offset="100%" stop-color="#ffb6c1"/>
+          </linearGradient>
+          <linearGradient id="creamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#fff5f7"/>
+          </linearGradient>
+        </defs>
+
+        <!-- PANDA BODY -->
+        <!-- Back Paws / Feet -->
+        <ellipse cx="95" cy="245" rx="22" ry="16" fill="#2d3436"/>
+        <ellipse cx="205" cy="245" rx="22" ry="16" fill="#2d3436"/>
+        <!-- Pink Footpads -->
+        <ellipse cx="95" cy="246" rx="12" ry="8" fill="#ffb6c1" opacity="0.8"/>
+        <ellipse cx="205" cy="246" rx="12" ry="8" fill="#ffb6c1" opacity="0.8"/>
+
+        <!-- Main Body -->
+        <ellipse cx="150" cy="210" rx="75" ry="55" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+        <ellipse cx="150" cy="215" rx="50" ry="38" fill="#f8f9fa"/>
+
+        <!-- Arms holding cake -->
+        <path d="M 85 190 Q 70 210 100 225" fill="none" stroke="#2d3436" stroke-width="26" stroke-linecap="round"/>
+        <path d="M 215 190 Q 230 210 200 225" fill="none" stroke="#2d3436" stroke-width="26" stroke-linecap="round"/>
+
+        <!-- PANDA HEAD -->
+        <!-- Ears -->
+        <circle cx="80" cy="70" r="28" fill="#2d3436"/>
+        <circle cx="80" cy="70" r="16" fill="#ffb6c1" opacity="0.4"/>
+        <circle cx="220" cy="70" r="28" fill="#2d3436"/>
+        <circle cx="220" cy="70" r="16" fill="#ffb6c1" opacity="0.4"/>
+
+        <!-- Head Base -->
+        <ellipse cx="150" cy="115" rx="82" ry="68" fill="#ffffff"/>
+        
+        <!-- Eye Patches (Classic Panda) -->
+        <ellipse cx="112" cy="118" rx="24" ry="20" fill="#2d3436" transform="rotate(-12 112 118)"/>
+        <ellipse cx="188" cy="118" rx="24" ry="20" fill="#2d3436" transform="rotate(12 188 118)"/>
+
+        <!-- EYES - Open (Anime Kawaii style with high sparkle) -->
+        <g class="eye-open">
+          <!-- Left Eye -->
+          <circle cx="115" cy="116" r="13" fill="#151515"/>
+          <circle cx="111" cy="111" r="5" fill="#ffffff"/> <!-- Large sparkle -->
+          <circle cx="118" cy="121" r="2.5" fill="#ffffff"/> <!-- Small sparkle -->
+
+          <!-- Right Eye -->
+          <circle cx="185" cy="116" r="13" fill="#151515"/>
+          <circle cx="181" cy="111" r="5" fill="#ffffff"/> <!-- Large sparkle -->
+          <circle cx="188" cy="121" r="2.5" fill="#ffffff"/> <!-- Small sparkle -->
+        </g>
+
+        <!-- EYES - Closed (Happy / Blowing Candles expression) -->
+        <g class="eye-closed">
+          <!-- Left Eye Closed (Happy anime curve ^) -->
+          <path d="M 101 118 Q 112 104 123 118" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+          <!-- Right Eye Closed (Happy anime curve ^) -->
+          <path d="M 177 118 Q 188 104 199 118" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- Cheeks / Blush -->
+        <ellipse cx="92" cy="132" rx="16" ry="10" fill="url(#blush)"/>
+        <ellipse cx="208" cy="132" rx="16" ry="10" fill="url(#blush)"/>
+
+        <!-- Nose & Mouth -->
+        <ellipse cx="150" cy="126" rx="7" ry="5" fill="#2d3436"/>
+        <path class="mouth-open" d="M 144 133 Q 150 138 156 133" fill="none" stroke="#2d3436" stroke-width="3" stroke-linecap="round"/>
+        
+        <!-- Bow on head -->
+        <path d="M 200 55 C 190 45 190 65 200 60 C 210 65 210 45 200 55 Z" fill="#ff4081"/>
+        <circle cx="200" cy="57" r="4" fill="#fff"/>
+
+        <!-- BIRTHDAY CAKE IN HANDS -->
+        <g id="cakeGroup" transform="translate(0, 10)">
+          <!-- Cake Plate -->
+          <ellipse cx="150" cy="225" rx="55" ry="12" fill="#e0e0e0"/>
+          <ellipse cx="150" cy="223" rx="52" ry="10" fill="#ffffff"/>
+
+          <!-- Cake Base Layer -->
+          <path d="M 105 195 L 105 218 Q 150 228 195 218 L 195 195 Z" fill="url(#cakeGrad)"/>
+          
+          <!-- Cream / Frosting Layer -->
+          <ellipse cx="150" cy="195" rx="45" ry="10" fill="url(#creamGrad)"/>
+          
+          <!-- Drips of Frosting -->
+          <path d="M 105 195 Q 110 205 115 197 Q 120 208 130 197 Q 140 210 150 197 Q 160 208 170 197 Q 180 207 185 197 Q 190 204 195 195 Z" fill="#ffffff"/>
+
+          <!-- Strawberries on Cake -->
+          <circle cx="120" cy="193" r="5" fill="#ff4d4d"/>
+          <circle cx="150" cy="191" r="5.5" fill="#ff4d4d"/>
+          <circle cx="180" cy="193" r="5" fill="#ff4d4d"/>
+
+          <!-- CANDLE -->
+          <rect x="147" y="172" width="6" height="20" rx="3" fill="#74b9ff"/>
+          <!-- Candle Stripes -->
+          <path d="M 147 176 L 153 174 M 147 182 L 153 180 M 147 188 L 153 186" stroke="#ffffff" stroke-width="1.5"/>
+
+          <!-- FLAME AND SMOKE GROUP -->
+          <g id="flameGroup">
+            <!-- Glow -->
+            <circle class="flame" cx="150" cy="164" r="10" fill="#ffeaa7" opacity="0.5"/>
+            <!-- Flame Outer -->
+            <path class="flame" d="M 150 154 C 145 163 147 168 150 169 C 153 168 155 163 150 154 Z" fill="#ff7675"/>
+            <!-- Flame Inner -->
+            <path class="flame" d="M 150 158 C 148 163 149 167 150 168 C 151 167 152 163 150 158 Z" fill="#fdcb6e"/>
+            
+            <!-- Smoke Puff (Hidden until blown) -->
+            <g class="smoke">
+              <circle cx="150" cy="155" r="4" fill="#b2bec3"/>
+              <circle cx="146" cy="148" r="6" fill="#dfe6e9"/>
+              <circle cx="153" cy="140" r="8" fill="#dfe6e9"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Romantic & Cute Dedicated Message Box -->
+    <div class="message-box">
+      <p class="message-text">
+        ¡Feliz cumpleaños amor! 🎉💖 Que este nuevo año de vida esté lleno de sonrisas, momentos mágicos y muchísima felicidad. Te amo con todo mi corazón.
+      </p>
+      <span class="signature">Att: Odalys 💕</span>
+    </div>
+
+    <!-- Action Button -->
+    <button class="btn-blow" id="blowBtn" onclick="blowCandle()">
+      <span>🕯️</span> Haz clic para soplar la vela 🎂
+    </button>
+    <div class="instruction-text">Toca el botón para soplar las velas</div>
+  </div>
+
+  <script>
+    let isBlown = false;
+
+    // Create background floating hearts
+    function createBgHearts() {
+      const container = document.getElementById('bgHearts');
+      const hearts = ['💖', '💕', '💗', '🌸', '✨'];
+      for (let i = 0; i < 18; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'bg-heart';
+        heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDelay = (Math.random() * 8) + 's';
+        heart.style.animationDuration = (6 + Math.random() * 6) + 's';
+        container.appendChild(heart);
+      }
+    }
+    createBgHearts();
+
+    // Spawn floating heart particles on click
+    function spawnPopHearts(x, y) {
+      const hearts = ['💖', '💕', '💗', '❤️️', '✨'];
+      for (let i = 0; i < 12; i++) {
+        const h = document.createElement('div');
+        h.className = 'pop-heart';
+        h.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+        h.style.left = x + 'px';
+        h.style.top = y + 'px';
+        
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 60 + Math.random() * 80;
+        const dx = Math.cos(angle) * dist + 'px';
+        const dy = Math.sin(angle) * dist + 'px';
+        
+        h.style.setProperty('--dx', dx);
+        h.style.setProperty('--dy', dy);
+        
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 1200);
+      }
+    }
+
+    // Play Happy Birthday tune synthesized using Web Audio API
+    function playHappyBirthdayMusic() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
+
+        // Happy Birthday Notes (Frequency in Hz, Duration in seconds)
+        const notes = [
+          { f: 261.63, d: 0.35 }, // C4
+          { f: 261.63, d: 0.25 }, // C4
+          { f: 293.66, d: 0.6 },  // D4
+          { f: 261.63, d: 0.6 },  // C4
+          { f: 349.23, d: 0.6 },  // F4
+          { f: 329.63, d: 1.0 },  // E4
+
+          { f: 261.63, d: 0.35 }, // C4
+          { f: 261.63, d: 0.25 }, // C4
+          { f: 293.66, d: 0.6 },  // D4
+          { f: 261.63, d: 0.6 },  // C4
+          { f: 392.00, d: 0.6 },  // G4
+          { f: 349.23, d: 1.0 },  // F4
+
+          { f: 261.63, d: 0.35 }, // C4
+          { f: 261.63, d: 0.25 }, // C4
+          { f: 523.25, d: 0.6 },  // C5
+          { f: 440.00, d: 0.6 },  // A4
+          { f: 349.23, d: 0.6 },  // F4
+          { f: 329.63, d: 0.6 },  // E4
+          { f: 293.66, d: 0.8 },  // D4
+
+          { f: 466.16, d: 0.35 }, // A#4
+          { f: 466.16, d: 0.25 }, // A#4
+          { f: 440.00, d: 0.6 },  // A4
+          { f: 349.23, d: 0.6 },  // F4
+          { f: 392.00, d: 0.6 },  // G4
+          { f: 349.23, d: 1.2 }   // F4
+        ];
+
+        let currentTime = ctx.currentTime + 0.1;
+
+        notes.forEach((note) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          // Cute music box / chime synth sound
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(note.f, currentTime);
+
+          gain.gain.setValueAtTime(0, currentTime);
+          gain.gain.linearRampToValueAtTime(0.25, currentTime + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.001, currentTime + note.d);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(currentTime);
+          osc.stop(currentTime + note.d);
+
+          currentTime += note.d * 0.95; // Smooth cadence
+        });
+      } catch (e) {
+        console.log("Audio not supported or blocked", e);
+      }
+    }
+
+    // Main Blow Candle Action
+    function blowCandle() {
+      if (isBlown) return;
+      isBlown = true;
+
+      const flameGroup = document.getElementById('flameGroup');
+      const pandaSvg = document.getElementById('pandaSvg');
+      const btn = document.getElementById('blowBtn');
+
+      // 1. Extinguish candle flame & show smoke
+      flameGroup.classList.add('blown-out');
+
+      // 2. Make Panda close eyes (cute happy expression)
+      pandaSvg.classList.add('panda-happy');
+
+      // 3. Trigger confetti explosion
+      triggerConfetti();
+
+      // 4. Pop hearts from button location
+      const rect = btn.getBoundingClientRect();
+      spawnPopHearts(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+      // 5. Play music tune
+      playHappyBirthdayMusic();
+
+      // 6. Update Button text and state
+      btn.innerHTML = '<span>🎉</span> ¡Deseo Cumplido! 💖';
+      btn.disabled = true;
+    }
+
+    // Confetti animation
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        // First big burst
+        confetti({
+          particleCount: 100,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#ff4081', '#ff79b0', '#ffeaa7', '#74b9ff', '#a29bfe']
+        });
+
+        // Secondary side bursts
+        setTimeout(() => {
+          confetti({
+            particleCount: 50,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 }
+          });
+          confetti({
+            particleCount: 50,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 }
+          });
+        }, 250);
+      }
+    }
+  </script>
+</body>
+</html>
